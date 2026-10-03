@@ -63,9 +63,18 @@
     txt.textContent=msg[b.dataset.mood]||'';box.classList.add('show');
   })});
 
-  // contact form: backend not wired yet
   var f=document.getElementById('enquiry');
-  if(f)f.addEventListener('submit',function(e){e.preventDefault();document.getElementById('ok').classList.add('show')});
+  if(f)f.addEventListener('submit',function(e){
+    var endpoint=f.dataset.endpoint,ok=document.getElementById('ok');
+    if(!endpoint){e.preventDefault();ok.textContent='Online enquiries are not connected yet. Please call +91 9694300555 or email contact@ekasa.in.';ok.classList.add('show');return}
+    e.preventDefault();
+    var submit=f.querySelector('button[type="submit"]');
+    submit.disabled=true;
+    fetch(endpoint,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
+      .then(function(r){if(!r.ok)throw new Error('Request failed');ok.textContent='Thanks. Your enquiry has been sent. We will reply within a day.';ok.classList.add('show');f.reset()})
+      .catch(function(){ok.textContent='We could not send your enquiry. Please call +91 9694300555 or email contact@ekasa.in.';ok.classList.add('show')})
+      .finally(function(){submit.disabled=false});
+  });
 })();
 
 // glass layer: slow parallax on blobs + gentle tilt on glass panels

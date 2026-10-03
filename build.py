@@ -256,10 +256,10 @@ contact = head("Contact", "Talk to <em>EKASA.</em>", "Call, WhatsApp, or send an
 <label>Message<textarea name="message"></textarea></label>
 <button class="btn btn-primary" type="submit" style="align-self:flex-start">Send enquiry{AR}</button>
 <p class="note">Prefer not to call? Use this form and we’ll reply by phone, WhatsApp, or email.</p>
-<p class="ok" id="ok" role="status">Thanks. If you need a faster reply, call or WhatsApp +91 9694300555.</p>
+<p class="ok" id="ok" role="status">Online enquiries are not connected yet. Please call +91 9694300555 or email contact@ekasa.in.</p>
 </form></div>
 <div class="grid" style="gap:16px">
-<div class="card rv" style="padding:12px 28px"><div class="crow">{ic(IC["ph"])}<div><b>Phone / WhatsApp</b><a href="tel:+919694300555">+91 9694300555</a></div></div><div class="crow">{ic(IC["ml"])}<div><b>Email</b><a href="mailto:contact@ekasa.in">contact@ekasa.in</a></div></div><div class="crow">{ic(IC["pin"])}<div><b>Address</b><span>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</span></div></div><div class="crow">{ic(IC["clk"])}<div><b>Hours</b><span>Mon&ndash;Sat, 10am&ndash;6pm</span></div></div></div>
+<div class="card rv" style="padding:12px 28px"><div class="crow">{ic(IC["ph"])}<div><b>Phone / WhatsApp</b><a href="tel:+919694300555">+91 9694300555</a></div></div><div class="crow">{ic(IC["ml"])}<div><b>Email</b><a href="mailto:contact@ekasa.in">contact@ekasa.in</a></div></div><div class="crow">{ic(IC["pin"])}<div><b>Address</b><span>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</span></div></div><div class="crow">{ic(IC["clk"])}<div><b>Hours</b><span>Mon&ndash;Sat, 11am&ndash;5pm</span></div></div></div>
 <div class="map rv"><iframe title="EKASA contact map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="{MAP_EMBED}" style="width:100%;height:100%;min-height:260px;border:0;border-radius:inherit;"></iframe></div>
 </div></div></div></section>
 ''' + band("Your clarity, one message <em>away.</em>", '<p class="crisis" style="color:rgba(255,255,255,.8)"><b style="color:#fff">Not for crisis situations.</b> Call Tele-MANAS 14416 or 112.</p>')
