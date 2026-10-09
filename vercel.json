@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "ekasa.life" }],
+      "destination": "https://www.ekasa.life/$1",
+      "permanent": true
+    }
+  ]
+}

@@ -1,15 +1,19 @@
 import datetime
+import json
 YEAR = datetime.date.today().year
 FP = "https://discover.ekasa.life/fp"
 DOST = "https://discover.ekasa.life/dost"
 OG_IMAGE = "img/ekasa-wordmark.png"
+SITE_URL = "https://www.ekasa.life"
+SESSIONS_COUNT = "1000+"
+SESSIONS_VALUE = "1000"
 MAP_EMBED = "https://www.google.com/maps?q=92/64+Patel+Marg+Sector+9+Mansarovar+Jaipur+302020&output=embed"
 AR = '<i class="ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i>'
 
 def btn(t, href, cls="btn-primary", ar=True):
     return f'<a class="btn {cls}" href="{href}">{t}{AR if ar else ""}</a>'
 
-PAGES = [("index", "Home"), ("about", "About"), ("faq", "FAQ"), ("resources", "Resources"), ("testimonials", "Testimonials"), ("contact", "Contact")]
+PAGES = [("index", "Home"), ("about", "About"), ("faq", "FAQ"), ("resources", "Resources"), ("testimonials", "Testimonials"), ("contact", "Contact"), ("privacy", "Privacy"), ("terms", "Terms")]
 
 BL = '<div class="blobs" aria-hidden="true"><i class="blob b1" data-speed=".07"></i><i class="blob b2" data-speed="-.05"></i><i class="blob b3" data-speed=".09"></i></div>'
 BLB = '<div class="blobs" aria-hidden="true"><i class="blob b1" data-speed=".05"></i><i class="blob b2" data-speed="-.04"></i></div>'
@@ -22,7 +26,9 @@ LOOP = '<path d="M4 12a8 8 0 0114-5.3L20 9M20 12a8 8 0 01-14 5.3L4 15M20 4v5h-5M
 
 def shell(fn, title, desc, body, ctaTitle=None):
     links = "".join(f'<li><a href="{p}.html"{" aria-current=page" if p==fn else ""}>{n}</a></li>' for p, n in PAGES)
-    canonical = f"{fn}.html"
+    canonical = f"{SITE_URL}/" if fn == "index" else f"{SITE_URL}/{fn}.html"
+    og_title = "EKASA | Personality Development & Self-Discovery" if fn == "index" else title
+    og_desc = "Holistic wellness, rooted in tradition and made for modern life. Personality assessments, counselling and workshops."
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,8 +40,8 @@ def shell(fn, title, desc, body, ctaTitle=None):
 <link rel="canonical" href="{canonical}">
 <meta property="og:site_name" content="EKASA">
 <meta property="og:type" content="website">
-<meta property="og:title" content="{title}">
-<meta property="og:description" content="{desc}">
+<meta property="og:title" content="{og_title}">
+<meta property="og:description" content="{og_desc if fn == "index" else desc}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{OG_IMAGE}">
 <meta name="twitter:card" content="summary_large_image">
@@ -62,10 +68,10 @@ def shell(fn, title, desc, body, ctaTitle=None):
 <div class="fcell"><img class="flogo" src="img/ekasa-logo.png" alt="EKASA"><p>Guided self-discovery and confidential counselling, in one place. Know yourself, heal what hurts.</p>{btn("Book assessment", FP)}</div>
 <div class="fcell"><h4>Not sure where to start? <em>Say hello.</em></h4><p>Tell us what feels off. We reply within a day.</p>{btn("Contact us", "contact.html", "btn-ghost")}</div>
 <div class="fcell"><div class="flinks"><ul><li><b>Explore</b></li><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li></ul><ul><li><b>More</b></li><li><a href="resources.html">Resources</a></li><li><a href="testimonials.html">Testimonials</a></li><li><a href="contact.html">Contact</a></li></ul><ul><li><b>Book</b></li><li><a href="{DOST}">EKASA Dost</a></li><li><a href="{FP}">EKASA Seed</a></li><li><a href="{FP}">EKASA Flower</a></li></ul></div></div>
-<div class="fcell"><a class="ph" href="tel:+919694300555">+91 9694300555</a><a href="mailto:contact@ekasa.in">contact@ekasa.in</a><p>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</p><a class="chip" href="https://instagram.com/archpoint_wellness">Instagram &middot; archpoint_wellness</a></div>
+<div class="fcell"><a class="ph" href="tel:+919694300555">+91 96943 00555</a><a href="https://wa.me/919694300555">WhatsApp</a><a href="mailto:contact@ekasa.in">contact@ekasa.in</a><p>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</p><a class="chip" href="https://instagram.com/archpoint_wellness">Instagram &middot; archpoint_wellness</a></div>
 <div class="fcell emerg"><b>Not for crisis situations.</b> Tele-MANAS: 14416 (24/7). Emergency: 112.</div>
 </div>
-<div class="fbar"><span>&copy; {YEAR} EKASA (powered by Arch Point Wellness Pvt. Ltd.). All rights reserved.</span><span class="ap"><a href="#">Privacy Policy</a><img src="img/arch-point-wellness-logo.png" alt="Arch Point Wellness"></span></div>
+<div class="fbar"><span>&copy; {YEAR} EKASA (powered by Arch Point Wellness Pvt. Ltd.). All rights reserved.</span><span class="ap"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms</a><img src="img/arch-point-wellness-logo.png" alt="Arch Point Wellness"></span></div>
 </div></footer>
 <script src="js/main.js"></script>
 </body>
@@ -87,31 +93,32 @@ chips = "".join(f'<span class="chip{" gold" if i%2 else ""}">{t}</span>' for i,t
 home = f'''
 <section class="hero glassy">{BL}<div class="wrap">
 <span class="eyebrow fade-up d1">EKASA &middot; Arch Point Wellness</span>
-<h1><span class="ln"><span>Know <em>Yourself.</em></span></span><span class="ln"><span>Heal what <em>hurts.</em></span></span></h1>
-<p class="lead fade-up d3">One assessment. One conversation. A clearer you.</p>
-<div class="hero-actions fade-up d4">{btn("Book your assessment", FP)}{btn("Talk to a counsellor", DOST, "btn-ghost", False)}</div>
-<div class="proof glass fade-up d5"><div class="avatars"><span>S</span><span>P</span><span>D</span><span>K</span></div><span>2000+ sessions completed &middot; 100% confidential</span></div>
+<h1><span class="ln"><span>Discover who you <em>really are.</em></span></span></h1>
+<p class="lead fade-up d3">Holistic wellness, rooted in tradition and made for modern life.</p>
+<p class="hero-support fade-up d3">Science, Soul &amp; Self in Harmony. Personality development, self-discovery and counselling for anyone aged 5 and above.</p>
+<div class="hero-actions fade-up d4">{btn("Begin Your Journey", FP)}{btn("Talk to EKASA Dost", DOST, "btn-ghost", False)}</div>
+<div class="proof glass fade-up d5"><span>{SESSIONS_COUNT} sessions conducted</span></div>
+<p class="trust-line fade-up d5">Private. Practical. Designed for everyday life.</p>
 <div class="marq fade-up d6" aria-hidden="true"><div class="marq-track">{chips}{chips}</div></div>
 <div class="tiles rv zoom">
 <div class="tile photo"><img src="img/tanya.jpg" alt="Tanya Maniktala"><div class="cap"><b>Tanya Maniktala</b><small>Actress</small></div></div>
 <div class="tile quote notch tilt">{BLB}<span class="qm">&ldquo;</span><p>EKASA helped me uncover my <b class="hl">strengths</b>, gain valuable personal insights, and truly understand my capabilities. Now I feel more empowered than ever to take on bigger things in life.</p><div class="who"><b>Tanya Maniktala</b><small>Actress</small></div></div>
 </div>
-<div class="stats glass rv"><div class="stat"><b data-to="2000" data-suf="+">2000+</b><span>Sessions completed</span></div><div class="stat"><b data-to="100" data-suf="%">100%</b><span>Confidential</span></div><div class="stat"><b data-to="98" data-suf="%">98%</b><span>Satisfaction rate</span></div></div>
+<div class="stats glass rv"><div class="stat"><b data-to="{SESSIONS_VALUE}" data-suf="+">{SESSIONS_COUNT}</b><span>Sessions conducted</span></div><div class="stat"><b data-to="100" data-suf="%">100%</b><span>Confidential</span></div><div class="stat"><b data-to="98" data-suf="%">98%</b><span>Satisfaction rate</span></div></div>
 </div></section>
 
 <section class="alt"><div class="wrap">
-<div class="head rv"><span class="eyebrow">Why us</span><h2>Why people <em>choose</em> EKASA</h2><p class="lead">Most places offer half of what you need. Here's the other half.</p></div>
-<div class="grid g4 stag">
-<div class="card"><span class="num">1</span><h3>Complete, not partial</h3><p>Assessment and counselling, in one place, not split across providers who don't talk to each other.</p></div>
-<div class="card accent"><span class="num">2</span><h3>Real consultation</h3><p>Every report is walked through with you. Nothing arrives as just a PDF.</p></div>
-<div class="card"><span class="num">3</span><h3>Every stage of life</h3><p>Students, professionals, homemakers, couples, entrepreneurs, retirees.</p></div>
-<div class="card"><span class="num">4</span><h3>Fully confidential</h3><p>What you share in a session, or discover in a report, stays between you and EKASA.</p></div>
+<div class="head rv"><span class="eyebrow">Why choose EKASA</span><h2>Why choose <em>EKASA</em></h2><p class="lead">A thoughtful path to understanding yourself, built on ancient wisdom and modern science.</p></div>
+<div class="grid g3 why-grid stag">
+<div class="card"><span class="num">1</span><h3>Ancient wisdom, modern science</h3><p>We blend ancient sciences with modern psychological and neurological tools for a fuller picture of who you are.</p></div>
+<div class="card"><span class="num">2</span><h3>For every stage of life</h3><p>Designed for anyone aged 5 and above: school students, college students, working professionals and parents.</p></div>
+<div class="card"><span class="num">3</span><h3>{SESSIONS_COUNT} sessions conducted</h3><p>Individuals and families have used EKASA to find clarity in studies, career, relationships and everyday life. <!-- VERIFY: "individuals and families" is a soft estimate; adjust or remove --></p></div>
+<div class="card"><span class="num">4</span><h3>Clear, practical reports</h3><p>A guided assessment of about one hour, with your personalised report ready in 2 to 3 working days.</p></div>
+<div class="card"><span class="num">5</span><h3>Private and confidential</h3><p>Your sessions and results stay between you and EKASA (and a parent or guardian for a child).</p></div>
+<div class="card"><span class="num">6</span><h3>Online and in person</h3><p>EKASA Dost counselling is available both online and in person, so support fits your life.</p></div>
 </div>
-<div class="grid g3 stag" style="margin-top:16px">
-<div class="card" style="flex-direction:row;align-items:center;gap:16px">{ic(LOCK)}<div><h3 style="font-size:20px">Confidential</h3><p>Private, always</p></div></div>
-<div class="card" style="flex-direction:row;align-items:center;gap:16px">{ic(TARGET)}<div><h3 style="font-size:20px">Personalised</h3><p>Built around you</p></div></div>
-<div class="card" style="flex-direction:row;align-items:center;gap:16px">{ic(LOOP)}<div><h3 style="font-size:20px">Flexible</h3><p>Online or in person</p></div></div>
-</div></div></section>
+<div style="text-align:center;margin-top:36px">{btn("Book your EKASA session", FP, "btn-primary")}</div>
+</div></section>
 
 <section><div class="wrap">
 <div class="head rv"><span class="eyebrow">How it works</span><h2>Three steps, start to <em>finish</em></h2></div>
@@ -198,19 +205,18 @@ about = head("About us", "Why people <em>choose</em> EKASA", "Self-discovery and
 ''' + band("Ready to <em>begin?</em>")
 
 # ---------------- FAQ
-faqs = [
- ("What's the difference between EKASA Seed and EKASA Flower?", "Seed covers personality, brain dominance, learning style, and career fit. Flower includes everything in Seed, plus Astrology, Numerology, and Chakra Assessment."),
- ("Does the assessment diagnose anything?", "No. EKASA is a self-discovery framework, not a medical or psychological diagnosis."),
- ("How long does it take, and when do I get my report?", "The assessment takes about 1 hour. Your report arrives within 2 to 3 working days."),
- ("Is EKASA Dost confidential?", "Yes, completely. What you share stays between you and your counsellor."),
- ("Do I need to be in crisis to book a counselling session?", "No. Many people come simply because something feels off, before it becomes bigger."),
- ("What does it cost?", "Pricing for EKASA Seed, Flower, and Dost is shared on enquiry."),
-]
-items = "".join(f'<div class="acc-item{" open" if i==0 else ""}"><h3 style="font-size:inherit"><button class="acc-q" aria-expanded="{"true" if i==0 else "false"}"><span>{q}</span><span class="acc-i"></span></button></h3><div class="acc-a"><div><p>{a}</p></div></div></div>' for i, (q, a) in enumerate(faqs))
+with open("faq.json", encoding="utf-8") as faq_file:
+    faqs = json.load(faq_file)
+def faq_item(item, index):
+    verify = f'<!-- VERIFY: {item["verify"]} -->' if item.get("verify") else ""
+    return f'<details class="faq-item"{" open" if index == 0 else ""}><summary>{item["question"]}</summary><div><p>{item["answer"]}</p>{verify}</div></details>'
+items = "".join(faq_item(item, i) for i, item in enumerate(faqs))
+faq_schema = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": item["question"], "acceptedAnswer": {"@type": "Answer", "text": item["answer"]}} for item in faqs]}, ensure_ascii=False)
 faq = head("FAQ", "Questions, <em>answered.</em>", "Everything about assessments and counselling. Tap a question to open it.") + f'''
 <section style="padding-top:24px"><div class="wrap"><div class="faq-wrap">
 <div class="faq-side rv left"><div class="card accent"><h3 style="font-size:30px;letter-spacing:-.03em">Still have questions?</h3><p>We reply within a day.</p><div style="margin-top:8px">{btn("Contact us", "contact.html", "btn-light")}</div></div></div>
-<div class="acc stag">{items}</div></div></div></section>
+<div class="faq-list stag">{items}</div></div></div></section>
+<script type="application/ld+json">{faq_schema}</script>
 '''
 
 # ---------------- RESOURCES
@@ -256,13 +262,26 @@ contact = head("Contact", "Talk to <em>EKASA.</em>", "Call, WhatsApp, or send an
 <label>Message<textarea name="message"></textarea></label>
 <button class="btn btn-primary" type="submit" style="align-self:flex-start">Send enquiry{AR}</button>
 <p class="note">Prefer not to call? Use this form and we’ll reply by phone, WhatsApp, or email.</p>
-<p class="ok" id="ok" role="status">Online enquiries are not connected yet. Please call +91 9694300555 or email contact@ekasa.in.</p>
+<p class="ok" id="ok" role="status">Online enquiries are not connected yet. Please call +91 96943 00555 or email contact@ekasa.in.</p>
 </form></div>
 <div class="grid" style="gap:16px">
-<div class="card rv" style="padding:12px 28px"><div class="crow">{ic(IC["ph"])}<div><b>Phone / WhatsApp</b><a href="tel:+919694300555">+91 9694300555</a></div></div><div class="crow">{ic(IC["ml"])}<div><b>Email</b><a href="mailto:contact@ekasa.in">contact@ekasa.in</a></div></div><div class="crow">{ic(IC["pin"])}<div><b>Address</b><span>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</span></div></div><div class="crow">{ic(IC["clk"])}<div><b>Hours</b><span>Mon&ndash;Sat, 11am&ndash;5pm</span></div></div></div>
+<div class="card rv" style="padding:12px 28px"><div class="crow">{ic(IC["ph"])}<div><b>Phone / WhatsApp</b><a href="tel:+919694300555">+91 96943 00555</a></div></div><div class="crow">{ic(IC["ml"])}<div><b>Email</b><a href="mailto:contact@ekasa.in">contact@ekasa.in</a></div></div><div class="crow">{ic(IC["pin"])}<div><b>Address</b><span>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</span></div></div><div class="crow">{ic(IC["clk"])}<div><b>Hours</b><span>Mon&ndash;Sat, 11am&ndash;5pm</span></div></div></div>
 <div class="map rv"><iframe title="EKASA contact map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="{MAP_EMBED}" style="width:100%;height:100%;min-height:260px;border:0;border-radius:inherit;"></iframe></div>
 </div></div></div></section>
 ''' + band("Your clarity, one message <em>away.</em>", '<p class="crisis" style="color:rgba(255,255,255,.8)"><b style="color:#fff">Not for crisis situations.</b> Call Tele-MANAS 14416 or 112.</p>')
+
+privacy = head("Privacy", "Privacy <em>Policy.</em>", "How EKASA handles information shared through this website.") + '''
+<section><div class="wrap legal-copy"><p><strong>Placeholder for review:</strong> This Privacy Policy is a plain-language placeholder and must be reviewed and completed by EKASA before publication.</p>
+<h2>Information we receive</h2><p>When you contact EKASA, we may receive the details you choose to send, such as your name, email address, phone number and message.</p>
+<h2>How we use it</h2><p>We use enquiry details to respond to requests, arrange services and provide support. We do not sell personal information.</p>
+<h2>Questions</h2><p>For privacy questions, contact <a href="mailto:contact@ekasa.in">contact@ekasa.in</a>.</p></div></section>
+'''
+terms = head("Terms", "Terms <em>of Use.</em>", "Terms for using the EKASA website and enquiry links.") + '''
+<section><div class="wrap legal-copy"><p><strong>Placeholder for review:</strong> These Terms are a plain-language placeholder and must be reviewed and completed by EKASA before publication.</p>
+<h2>Website information</h2><p>Content on this website is general information and is not medical or psychological diagnosis, emergency care or a substitute for professional advice.</p>
+<h2>Bookings</h2><p>Service details and pricing are confirmed on enquiry. Please use the booking links and contact details provided on this site.</p>
+<h2>Contact</h2><p>Questions can be sent to <a href="mailto:contact@ekasa.in">contact@ekasa.in</a>.</p></div></section>
+'''
 
 out = {
  "index": ("EKASA Jaipur | Self-Discovery Assessments & Counselling", "Self-discovery assessments, confidential counselling, and practical clarity in Jaipur by EKASA (Arch Point Wellness Pvt. Ltd.).", home),
@@ -271,7 +290,13 @@ out = {
  "resources": ("EKASA Resources | Self-Discovery & Counselling Guides", "Practical guides on assessment, counselling, burnout, and self-awareness from EKASA Jaipur.", res),
  "testimonials": ("EKASA Testimonials | Stories from Self-Discovery & Counselling", "Read stories from people who used EKASA Seed, Flower, and Dost for clearer decisions and confidential support.", tm),
  "contact": ("Contact EKASA Jaipur | Book a Consultation", "Contact EKASA in Jaipur to book a self-discovery assessment or confidential counselling session. Call, WhatsApp, or send an enquiry.", contact),
+ "privacy": ("EKASA Privacy Policy", "Read the EKASA privacy policy placeholder.", privacy),
+ "terms": ("EKASA Terms of Use", "Read the EKASA terms of use placeholder.", terms),
 }
 for k, (t, d, b) in out.items():
     open(f"{k}.html", "w").write(shell(k, t, d, b))
+open("404.html", "w", encoding="utf-8").write(shell("404", "Page not found | EKASA", "The page you requested could not be found.", head("404", "That page <em>moved.</em>", "Let's get you back to EKASA.") + f'<section><div class="wrap" style="text-align:center">{btn("Return home", "index.html")}</div></section>'))
+urls = [f"{SITE_URL}/" if k == "index" else f"{SITE_URL}/{k}.html" for k in out]
+open("sitemap.xml", "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{url}</loc></url>\n' for url in urls) + '</urlset>\n')
+open("robots.txt", "w", encoding="utf-8").write(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
 print("ok")
