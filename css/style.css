@@ -282,9 +282,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--maroon);
 .note{font-size:14px;color:var(--muted)}
 .ok{display:none;background:var(--gold-tint);border-radius:var(--r-md);padding:14px 18px;font-size:15px}
 .ok.show{display:block;animation:fadeup .6s var(--ease)}
-.legal-copy{max-width:760px;display:grid;gap:20px}
-.legal-copy h2{font-size:clamp(28px,4vw,44px);margin-top:20px}
-.legal-copy a{color:var(--maroon);text-decoration:underline}
 .crow{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--line)}
 .crow:last-child{border:0}
 .crow b{font-weight:500;display:block}

@@ -13,7 +13,7 @@ AR = '<i class="ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 def btn(t, href, cls="btn-primary", ar=True):
     return f'<a class="btn {cls}" href="{href}">{t}{AR if ar else ""}</a>'
 
-PAGES = [("index", "Home"), ("about", "About"), ("faq", "FAQ"), ("resources", "Resources"), ("testimonials", "Testimonials"), ("contact", "Contact"), ("privacy", "Privacy"), ("terms", "Terms")]
+PAGES = [("index", "Home"), ("about", "About"), ("faq", "FAQ"), ("resources", "Resources"), ("testimonials", "Testimonials"), ("contact", "Contact")]
 
 BL = '<div class="blobs" aria-hidden="true"><i class="blob b1" data-speed=".07"></i><i class="blob b2" data-speed="-.05"></i><i class="blob b3" data-speed=".09"></i></div>'
 BLB = '<div class="blobs" aria-hidden="true"><i class="blob b1" data-speed=".05"></i><i class="blob b2" data-speed="-.04"></i></div>'
@@ -71,7 +71,7 @@ def shell(fn, title, desc, body, ctaTitle=None):
 <div class="fcell"><a class="ph" href="tel:+919694300555">+91 96943 00555</a><a href="https://wa.me/919694300555">WhatsApp</a><a href="mailto:contact@ekasa.in">contact@ekasa.in</a><p>Arch Point Wellness Pvt. Ltd., 92/64, Patel Marg, Sector 9, Mansarovar, Jaipur 302020</p><a class="chip" href="https://instagram.com/archpoint_wellness">Instagram &middot; archpoint_wellness</a></div>
 <div class="fcell emerg"><b>Not for crisis situations.</b> Tele-MANAS: 14416 (24/7). Emergency: 112.</div>
 </div>
-<div class="fbar"><span>&copy; {YEAR} EKASA (powered by Arch Point Wellness Pvt. Ltd.). All rights reserved.</span><span class="ap"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms</a><img src="img/arch-point-wellness-logo.png" alt="Arch Point Wellness"></span></div>
+<div class="fbar"><span>&copy; {YEAR} EKASA (powered by Arch Point Wellness Pvt. Ltd.). All rights reserved.</span><span class="ap"><img src="img/arch-point-wellness-logo.png" alt="Arch Point Wellness"></span></div>
 </div></footer>
 <script src="js/main.js"></script>
 </body>
@@ -270,19 +270,6 @@ contact = head("Contact", "Talk to <em>EKASA.</em>", "Call, WhatsApp, or send an
 </div></div></div></section>
 ''' + band("Your clarity, one message <em>away.</em>", '<p class="crisis" style="color:rgba(255,255,255,.8)"><b style="color:#fff">Not for crisis situations.</b> Call Tele-MANAS 14416 or 112.</p>')
 
-privacy = head("Privacy", "Privacy <em>Policy.</em>", "How EKASA handles information shared through this website.") + '''
-<section><div class="wrap legal-copy"><p><strong>Placeholder for review:</strong> This Privacy Policy is a plain-language placeholder and must be reviewed and completed by EKASA before publication.</p>
-<h2>Information we receive</h2><p>When you contact EKASA, we may receive the details you choose to send, such as your name, email address, phone number and message.</p>
-<h2>How we use it</h2><p>We use enquiry details to respond to requests, arrange services and provide support. We do not sell personal information.</p>
-<h2>Questions</h2><p>For privacy questions, contact <a href="mailto:contact@ekasa.in">contact@ekasa.in</a>.</p></div></section>
-'''
-terms = head("Terms", "Terms <em>of Use.</em>", "Terms for using the EKASA website and enquiry links.") + '''
-<section><div class="wrap legal-copy"><p><strong>Placeholder for review:</strong> These Terms are a plain-language placeholder and must be reviewed and completed by EKASA before publication.</p>
-<h2>Website information</h2><p>Content on this website is general information and is not medical or psychological diagnosis, emergency care or a substitute for professional advice.</p>
-<h2>Bookings</h2><p>Service details and pricing are confirmed on enquiry. Please use the booking links and contact details provided on this site.</p>
-<h2>Contact</h2><p>Questions can be sent to <a href="mailto:contact@ekasa.in">contact@ekasa.in</a>.</p></div></section>
-'''
-
 out = {
  "index": ("EKASA Jaipur | Self-Discovery Assessments & Counselling", "Self-discovery assessments, confidential counselling, and practical clarity in Jaipur by EKASA (Arch Point Wellness Pvt. Ltd.).", home),
  "about": ("About EKASA Jaipur | Founders, Vision & Mission", "Meet the EKASA founders, understand the name, and see how our Jaipur practice combines self-discovery with confidential counselling.", about),
@@ -290,8 +277,6 @@ out = {
  "resources": ("EKASA Resources | Self-Discovery & Counselling Guides", "Practical guides on assessment, counselling, burnout, and self-awareness from EKASA Jaipur.", res),
  "testimonials": ("EKASA Testimonials | Stories from Self-Discovery & Counselling", "Read stories from people who used EKASA Seed, Flower, and Dost for clearer decisions and confidential support.", tm),
  "contact": ("Contact EKASA Jaipur | Book a Consultation", "Contact EKASA in Jaipur to book a self-discovery assessment or confidential counselling session. Call, WhatsApp, or send an enquiry.", contact),
- "privacy": ("EKASA Privacy Policy", "Read the EKASA privacy policy placeholder.", privacy),
- "terms": ("EKASA Terms of Use", "Read the EKASA terms of use placeholder.", terms),
 }
 for k, (t, d, b) in out.items():
     open(f"{k}.html", "w").write(shell(k, t, d, b))
